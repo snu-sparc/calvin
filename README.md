@@ -1,3 +1,23 @@
+# Noisy CALVIN dataset generator
+260225 
+Kisung Shin
+at ksshin@dale1:~/projects/sparc/
+```
+git clone --recurse-submodules https://github.com/snu-sparc/calvin.git
+export CALVIN_ROOT=$(pwd)/calvin
+
+cd $CALVIN_ROOT
+conda create -n calvin_venv python=3.8
+# 3.10 has unsolvable pyhash error. so, we should use python 3.8 venv.
+conda activate calvin_venv
+sh install.sh
+# pyhash error occurs
+pip install setuptools==57.5.0
+sh install.sh
+
+```
+
+
 # CALVIN
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/mees/calvin.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/mees/calvin/context:python)
