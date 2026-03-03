@@ -1,3 +1,9 @@
+# 260303 new settings
+ksshin@dale1
+```
+# same setup as commit "260303 UD-VLA ver" in calvin-ksshin branch in snu-saprc's UD-VLA
+```
+
 # Noisy CALVIN dataset generator
 260225 
 Kisung Shin
