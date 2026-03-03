@@ -8,10 +8,10 @@ opencv-python
 omegaconf
 plotly
 pyhash
-pytorch-lightning==1.8.6
-lightning_lite
-torch==1.13.1
-torchvision
+#pytorch-lightning==1.8.6
+#lightning_lite
+#torch==1.13.1
+#torchvision
 MulticoreTSNE
 gitpython
 scipy
