@@ -1,20 +1,27 @@
 #!/usr/bin/env python3
 """
-260327 virtualkss thanks to vscode's claude haiku
+260327 virtualkss
+thanks to vscode's claude haiku.
+
+python calvin_table_customize.py calvin_env/data/calvin_table_D 20 --overwrite --verbose \
+  --scene-template calvin_env/conf/scene/calvin_scene_D_custom.yaml \
+  --config-template calvin_env/conf/config_data_collection_custom.yaml
+
 """
 """Clone and recolor a Calvin table dataset under multiple HSV hues.
 
 Usage:
-    python calvin_table_customize.py <source_table_dir> <num_colors>
+    python calvin_table_customize.py <source_table_dir> <num_colors> [options]
 
 Example:
-    python calvin_table_customize.py reference/RoboVLMs/calvin/calvin_env/data/calvin_table_D 4
+    python calvin_table_customize.py reference/RoboVLMs/calvin/calvin_env/data/calvin_table_D 4 \
+        --scene-template reference/RoboVLMs/calvin/calvin_env/conf/scene/calvin_scene_D_custom.yaml \
+        --config-template reference/RoboVLMs/calvin/calvin_env/conf/config_data_collection_custom.yaml
 
 This creates:
-    reference/RoboVLMs/calvin/calvin_env/data/calvin_table_D_custom_00
-    reference/RoboVLMs/calvin/calvin_env/data/calvin_table_D_custom_01
-    reference/RoboVLMs/calvin/calvin_env/data/calvin_table_D_custom_02
-    reference/RoboVLMs/calvin/calvin_env/data/calvin_table_D_custom_03
+    .../data/calvin_table_D_custom_00, ..._01 etc
+    .../conf/scene/calvin_scene_D_custom_00.yaml etc
+    .../conf/config_data_collection_custom_00.yaml etc
 
 Each copy has its textures recolored with a single hue from an equally spaced HSV wheel.
 """
@@ -39,6 +46,16 @@ def parse_args():
     p.add_argument("num_colors", type=int, help="Number of hue variants to generate (e.g., 3,4,6)")
     p.add_argument("--overwrite", action="store_true", help="Overwrite existing output folders")
     p.add_argument("--verbose", action="store_true", help="Print extra logging")
+
+    p.add_argument("--scene-template", type=Path, default=None,
+                   help="Optional scene yaml template to clone and patch table path")
+    p.add_argument("--scene-output-dir", type=Path, default=None,
+                   help="Directory to save generated scene yaml files (default: same as template)")
+    p.add_argument("--config-template", type=Path, default=None,
+                   help="Optional config yaml template to clone and patch scene name")
+    p.add_argument("--config-output-dir", type=Path, default=None,
+                   help="Directory to save generated config yaml files (default: same as template)")
+
     return p.parse_args()
 
 
@@ -71,12 +88,40 @@ def recolor_texture(file_path: Path, hue_deg: float, verbose: bool = False):
     im.save(file_path)
 
 
+def patch_scene_file(template_path: Path, output_path: Path, src_folder_name: str, dst_folder_name: str,
+                     src_scene_name: str = None, dst_scene_name: str = None, verbose: bool = False):
+    content = template_path.read_text(encoding="utf-8")
+    content = content.replace(f"{src_folder_name}/", f"{dst_folder_name}/")
+    if src_scene_name and dst_scene_name:
+        content = content.replace(src_scene_name, dst_scene_name)
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(content, encoding="utf-8")
+    if verbose:
+        print(f"[INFO] Written scene config: {output_path}")
+
+
+def patch_config_file(template_path: Path, output_path: Path, src_scene_name: str, dst_scene_name: str,
+                      verbose: bool = False):
+    content = template_path.read_text(encoding="utf-8")
+    content = content.replace(f"- scene: {src_scene_name}", f"- scene: {dst_scene_name}")
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(content, encoding="utf-8")
+    if verbose:
+        print(f"[INFO] Written config file: {output_path}")
+
+
 def main():
     args = parse_args()
     source = args.source
     num_colors = args.num_colors
     overwrite = args.overwrite
     verbose = args.verbose
+    scene_template = args.scene_template
+    scene_output_dir = args.scene_output_dir
+    config_template = args.config_template
+    config_output_dir = args.config_output_dir
 
     if not source.exists() or not source.is_dir():
         print(f"Error: source folder does not exist: {source}")
@@ -92,10 +137,45 @@ def main():
         sys.exit(1)
 
     parent = source.parent
-    base = source.name
+    source_base = source.name
+
+    if scene_template and not scene_template.exists():
+        print(f"Error: scene template does not exist: {scene_template}")
+        sys.exit(1)
+
+    if config_template and not config_template.exists():
+        print(f"Error: config template does not exist: {config_template}")
+        sys.exit(1)
+
+    if scene_output_dir is None and scene_template is not None:
+        scene_output_dir = scene_template.parent
+
+    if config_output_dir is None and config_template is not None:
+        config_output_dir = config_template.parent
+
+    scene_template_name = None
+    if scene_template:
+        scene_template_name = scene_template.stem
+
+    config_template_name = None
+    if config_template:
+        config_template_name = config_template.stem
 
     for idx in range(num_colors):
-        dest_name = f"{base}_{idx}"
+        if num_colors == 1:
+            dest_name = f"{source_base}_custom"
+            scene_name = scene_template_name if scene_template_name else None
+            config_name = config_template_name if config_template_name else None
+        else:
+            dest_name = f"{source_base}_custom_{idx}"
+            if scene_template_name:
+                scene_name = f"{scene_template_name}_{idx}"
+            else:
+                scene_name = None
+            if config_template_name:
+                config_name = f"{config_template_name}_{idx}"
+            else:
+                config_name = None
 
         destination = parent / dest_name
 
@@ -122,6 +202,28 @@ def main():
             if tex_path.suffix.lower() not in [".png", ".jpg", ".jpeg"]:
                 continue
             recolor_texture(tex_path, hue, verbose=verbose)
+
+        if scene_template and scene_name:
+            dst_scene_path = scene_output_dir / f"{scene_name}.yaml"
+            patch_scene_file(
+                scene_template,
+                dst_scene_path,
+                src_folder_name=source_base,
+                dst_folder_name=dest_name,
+                src_scene_name=scene_template_name,
+                dst_scene_name=scene_name,
+                verbose=verbose,
+            )
+
+        if config_template and config_name and scene_name:
+            dst_config_path = config_output_dir / f"{config_name}.yaml"
+            patch_config_file(
+                config_template,
+                dst_config_path,
+                src_scene_name=scene_template_name,
+                dst_scene_name=scene_name,
+                verbose=verbose,
+            )
 
         if verbose:
             print(f"[OK] Generated {destination} with hue {hue:.1f}")
