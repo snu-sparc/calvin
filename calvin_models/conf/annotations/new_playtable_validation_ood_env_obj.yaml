@@ -1,0 +1,54 @@
+# OOD env + OOD object color remap for CALVIN D scene:
+#   block_red  -> green
+#   block_blue -> yellow
+#   block_pink -> purple
+# (Same annotations as new_playtable_validation_ood_obj.yaml; the environment
+#  also uses the OOD table/background URDF.)
+
+# rotation
+rotate_red_block_right: ["take the green block and rotate it to the right"]
+rotate_red_block_left: ["take the green block and rotate it to the left"]
+rotate_blue_block_right: ["take the yellow block and rotate it to the right"]
+rotate_blue_block_left: ["take the yellow block and rotate it to the left"]
+rotate_pink_block_right: ["take the purple block and rotate it to the right"]
+rotate_pink_block_left: ["take the purple block and rotate it to the left"]
+
+# sliding
+push_red_block_right: ["go push the green block right"]
+push_red_block_left: ["go push the green block left"]
+push_blue_block_right: ["go push the yellow block right"]
+push_blue_block_left: ["go push the yellow block left"]
+push_pink_block_right: ["go push the purple block right"]
+push_pink_block_left: ["go push the purple block left"]
+
+# open/close
+move_slider_left: [ "push the sliding door to the left side"]
+move_slider_right: [ "push the sliding door to the right side"]
+open_drawer: ["pull the handle to open the drawer"]
+close_drawer: ["push the handle to close the drawer"]
+
+# lifting
+lift_red_block_table: ["grasp and lift the green block"]
+lift_blue_block_table: ["grasp and lift the yellow block"]
+lift_pink_block_table: ["grasp and lift the purple block"]
+
+lift_red_block_slider: [ "lift the green block from the sliding cabinet"]
+lift_blue_block_slider: [ "lift the yellow block from the sliding cabinet"]
+lift_pink_block_slider: [ "lift the purple block from the sliding cabinet"]
+
+lift_red_block_drawer: ["Take the green block from the drawer"]
+lift_blue_block_drawer: ["Take the yellow block from the drawer"]
+lift_pink_block_drawer: ["Take the purple block from the drawer"]
+
+place_in_slider: [ "store the grasped block in the sliding cabinet"]
+place_in_drawer: [ "store the grasped block in the drawer"]
+
+push_into_drawer: ["slide the block that it falls into the drawer"]
+
+stack_block: ["stack the grasped block"]
+unstack_block: ["remove the stacked block"]
+
+turn_on_lightbulb: ["use the switch to turn on the light bulb"]
+turn_off_lightbulb: ["use the switch to turn off the light bulb"]
+turn_on_led: ["press the button to turn on the led light"]
+turn_off_led: ["press the button to turn off the led light"]
