@@ -1,25 +1,25 @@
 # OOD env + OOD object color remap for CALVIN D scene:
-#   block_red  -> green
-#   block_blue -> yellow
-#   block_pink -> purple
+#   block_red  -> orange
+#   block_blue -> purple
+#   block_pink -> gray
 # (Same annotations as new_playtable_validation_ood_obj.yaml; the environment
 #  also uses the OOD table/background URDF.)
 
 # rotation
-rotate_red_block_right: ["take the green block and rotate it to the right"]
-rotate_red_block_left: ["take the green block and rotate it to the left"]
-rotate_blue_block_right: ["take the yellow block and rotate it to the right"]
-rotate_blue_block_left: ["take the yellow block and rotate it to the left"]
-rotate_pink_block_right: ["take the purple block and rotate it to the right"]
-rotate_pink_block_left: ["take the purple block and rotate it to the left"]
+rotate_red_block_right: ["take the orange block and rotate it to the right"]
+rotate_red_block_left: ["take the orange block and rotate it to the left"]
+rotate_blue_block_right: ["take the purple block and rotate it to the right"]
+rotate_blue_block_left: ["take the purple block and rotate it to the left"]
+rotate_pink_block_right: ["take the gray block and rotate it to the right"]
+rotate_pink_block_left: ["take the gray block and rotate it to the left"]
 
 # sliding
-push_red_block_right: ["go push the green block right"]
-push_red_block_left: ["go push the green block left"]
-push_blue_block_right: ["go push the yellow block right"]
-push_blue_block_left: ["go push the yellow block left"]
-push_pink_block_right: ["go push the purple block right"]
-push_pink_block_left: ["go push the purple block left"]
+push_red_block_right: ["go push the orange block right"]
+push_red_block_left: ["go push the orange block left"]
+push_blue_block_right: ["go push the purple block right"]
+push_blue_block_left: ["go push the purple block left"]
+push_pink_block_right: ["go push the gray block right"]
+push_pink_block_left: ["go push the gray block left"]
 
 # open/close
 move_slider_left: [ "push the sliding door to the left side"]
@@ -28,17 +28,17 @@ open_drawer: ["pull the handle to open the drawer"]
 close_drawer: ["push the handle to close the drawer"]
 
 # lifting
-lift_red_block_table: ["grasp and lift the green block"]
-lift_blue_block_table: ["grasp and lift the yellow block"]
-lift_pink_block_table: ["grasp and lift the purple block"]
+lift_red_block_table: ["grasp and lift the orange block"]
+lift_blue_block_table: ["grasp and lift the purple block"]
+lift_pink_block_table: ["grasp and lift the gray block"]
 
-lift_red_block_slider: [ "lift the green block from the sliding cabinet"]
-lift_blue_block_slider: [ "lift the yellow block from the sliding cabinet"]
-lift_pink_block_slider: [ "lift the purple block from the sliding cabinet"]
+lift_red_block_slider: [ "lift the orange block from the sliding cabinet"]
+lift_blue_block_slider: [ "lift the purple block from the sliding cabinet"]
+lift_pink_block_slider: [ "lift the gray block from the sliding cabinet"]
 
-lift_red_block_drawer: ["Take the green block from the drawer"]
-lift_blue_block_drawer: ["Take the yellow block from the drawer"]
-lift_pink_block_drawer: ["Take the purple block from the drawer"]
+lift_red_block_drawer: ["Take the orange block from the drawer"]
+lift_blue_block_drawer: ["Take the purple block from the drawer"]
+lift_pink_block_drawer: ["Take the gray block from the drawer"]
 
 place_in_slider: [ "store the grasped block in the sliding cabinet"]
 place_in_drawer: [ "store the grasped block in the drawer"]
